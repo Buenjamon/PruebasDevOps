@@ -1,0 +1,21 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - echo "Installing..."
+
+  build:
+    commands:
+      - echo "Build docker"
+      - docker build -t flask-app ./app
+      
+  post_build:
+    commands:
+      - echo "Running deploy script"
+      - chmod +x deploy.sh
+      - ./deploy.sh
+
+artifacts:
+  files:
+    - '**/*'
