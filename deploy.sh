@@ -1,12 +1,11 @@
 #!/bin/bash
 
-BUCKET_NAME="mi-bucket-ejemplo"
+BUCKET_NAME="devopsprueba1"
 BACKUP_FILE="backup_$(date +%F).tar.gz"
 LOG_FILE="backup.log"
 
 echo "Iniciando respaldo..." | tee -a $LOG_FILE
 
-# Carpeta actual (donde está tu código en CodeBuild)
 SOURCE_DIR="."
 
 # Crear backup
