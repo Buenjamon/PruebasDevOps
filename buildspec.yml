@@ -3,19 +3,20 @@ version: 0.2
 phases:
   install:
     commands:
-      - echo "Installing..."
+      - echo "Iniciando pipeline..."
 
   build:
     commands:
-      - echo "Build docker"
-      - docker build -t flask-app ./app
-      
+      - echo "Validando archivos..."
+      - ls pagina/
+
   post_build:
     commands:
-      - echo "Running deploy script"
-      - chmod +x deploy.sh
-      - ./deploy.sh
+      - echo "Subiendo pagina a S3..."
+      - aws s3 cp pagina/ s3://devopsprueba1/pagina/ --recursive
 
 artifacts:
   files:
-    - '**/*'
+    - pagina/pagina.html
+    - pagina/style.css
+  base-directory: .
