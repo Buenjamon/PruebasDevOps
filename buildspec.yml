@@ -13,7 +13,7 @@ phases:
   post_build:
     commands:
       - echo "Subiendo pagina a S3..."
-      - aws s3 cp pagina/ s3://mi-bucket-ejemplo/pagina/ --recursive
+      - aws s3 cp pagina/ s3://devopsprueba1/pagina/ --recursive
 
 artifacts:
   files:
