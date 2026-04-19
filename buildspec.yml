@@ -8,7 +8,7 @@ phases:
   build:
     commands:
       - echo "Validando archivos..."
-      - ls app/
+      - ls calculadora/app/
       - docker build -t calculadora ./calculadora/app
 
   post_build:
@@ -23,7 +23,7 @@ phases:
 
 artifacts:
   files:
-    - app/pagina.html
-    - app/style.css
+    - calculadora/app/pagina.html
+    - calculadora/app/style.css
     - backup.log
   base-directory: .
