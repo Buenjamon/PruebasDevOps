@@ -1,0 +1,29 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - echo "Iniciando build..."
+
+  build:
+    commands:
+      - echo "Validando archivos..."
+      - ls app/
+      - docker build -t calculadora ./app
+
+  post_build:
+    commands:
+      - echo "Subiendo archivos a S3..."
+      - aws s3 cp app/pagina.html s3://devopsprueba1/calculadora/pagina.html
+      - aws s3 cp app/style.css s3://devopsprueba1/calculadora/style.css
+      - echo "Generando backup.log..."
+      - echo "Build ejecutado el $(date '+%Y-%m-%d %H:%M:%S')" >> backup.log
+      - git log --oneline -10 >> backup.log 2>/dev/null || echo "Sin historial git disponible" >> backup.log
+      - aws s3 cp backup.log s3://devopsprueba1/backup.log
+
+artifacts:
+  files:
+    - app/pagina.html
+    - app/style.css
+    - backup.log
+  base-directory: .

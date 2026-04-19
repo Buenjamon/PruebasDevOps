@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora - Benjamín Moreno</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="container">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/6/65/Universidad_Tecmilenio.png" alt="Tecmilenio" class="logo">
+    <h1>Calculadora</h1>
+
+    <!-- ARITMÉTICA -->
+    <div class="card">
+      <h2>Calculadora Aritmética</h2>
+      <div class="inputs">
+        <input type="number" id="a1" placeholder="Número 1">
+        <select id="op">
+          <option value="+">+</option>
+          <option value="-">−</option>
+          <option value="*">×</option>
+          <option value="/">÷</option>
+        </select>
+        <input type="number" id="a2" placeholder="Número 2">
+      </div>
+      <button onclick="calcAritmetica()">Calcular</button>
+      <p class="resultado" id="resAritmetica"></p>
+    </div>
+
+    <!-- BINARIA -->
+    <div class="card">
+      <h2>Calculadora Binaria</h2>
+      <div class="inputs">
+        <input type="text" id="b1" placeholder="Binario 1 (ej: 1010)">
+        <select id="opBin">
+          <option value="+">+</option>
+          <option value="-">−</option>
+        </select>
+        <input type="text" id="b2" placeholder="Binario 2 (ej: 0110)">
+      </div>
+      <button onclick="calcBinaria()">Calcular</button>
+      <p class="resultado" id="resBinaria"></p>
+    </div>
+
+    <!-- LÓGICA -->
+    <div class="card">
+      <h2>Calculadora Lógica</h2>
+      <div class="inputs">
+        <select id="l1">
+          <option value="1">TRUE</option>
+          <option value="0">FALSE</option>
+        </select>
+        <select id="opLog">
+          <option value="AND">AND</option>
+          <option value="OR">OR</option>
+          <option value="XOR">XOR</option>
+        </select>
+        <select id="l2">
+          <option value="1">TRUE</option>
+          <option value="0">FALSE</option>
+        </select>
+      </div>
+      <button onclick="calcLogica()">Calcular</button>
+      <p class="resultado" id="resLogica"></p>
+    </div>
+
+  </div>
+
+  <script>
+    function calcAritmetica() {
+      const a = parseFloat(document.getElementById('a1').value);
+      const b = parseFloat(document.getElementById('a2').value);
+      const op = document.getElementById('op').value;
+      let res;
+      if (isNaN(a) || isNaN(b)) { mostrar('resAritmetica', 'Ingresa dos números', true); return; }
+      if (op === '+') res = a + b;
+      else if (op === '-') res = a - b;
+      else if (op === '*') res = a * b;
+      else if (op === '/') {
+        if (b === 0) { mostrar('resAritmetica', 'No se puede dividir entre 0', true); return; }
+        res = a / b;
+      }
+      mostrar('resAritmetica', 'Resultado: ' + parseFloat(res.toFixed(10)));
+    }
+
+    function calcBinaria() {
+      const b1 = document.getElementById('b1').value.trim();
+      const b2 = document.getElementById('b2').value.trim();
+      const op = document.getElementById('opBin').value;
+      if (!/^[01]+$/.test(b1) || !/^[01]+$/.test(b2)) {
+        mostrar('resBinaria', 'Solo ingresa 0s y 1s', true); return;
+      }
+      const n1 = parseInt(b1, 2);
+      const n2 = parseInt(b2, 2);
+      let res = op === '+' ? n1 + n2 : n1 - n2;
+      const binRes = res >= 0 ? res.toString(2) : '-' + Math.abs(res).toString(2);
+      mostrar('resBinaria', `Resultado: ${binRes} (decimal: ${res})`);
+    }
+
+    function calcLogica() {
+      const a = parseInt(document.getElementById('l1').value);
+      const b = parseInt(document.getElementById('l2').value);
+      const op = document.getElementById('opLog').value;
+      let res;
+      if (op === 'AND') res = a & b;
+      else if (op === 'OR') res = a | b;
+      else if (op === 'XOR') res = a ^ b;
+      mostrar('resLogica', 'Resultado: ' + (res ? 'TRUE' : 'FALSE'));
+    }
+
+    function mostrar(id, msg, error = false) {
+      const el = document.getElementById(id);
+      el.textContent = msg;
+      el.style.color = error ? '#c0392b' : '#1a7a3c';
+    }
+  </script>
+
+</body>
+</html>
