@@ -13,6 +13,9 @@ phases:
 
   post_build:
     commands:
+      - echo "Contenido del workspace:"
+      - ls -la
+      - ls -la calc/app/
       - echo "Subiendo archivos a S3..."
       - aws s3 cp calc/app/pagina.html s3://devopsprueba1/calculadora/pagina.html
       - aws s3 cp calc/app/style.css s3://devopsprueba1/calculadora/style.css
