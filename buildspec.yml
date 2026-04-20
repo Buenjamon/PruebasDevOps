@@ -25,6 +25,7 @@ phases:
       - aws s3 cp estados/app/index.html s3://$BUCKET/estados/index.html --content-type "text/html"
       - aws s3 cp estados/app/resultado.txt s3://$BUCKET/estados/resultado.txt --content-type "text/plain"
       - aws s3 cp estados/app/data.txt s3://$BUCKET/estados/data.txt
+      - aws s3 cp estados/app/procesar.py s3://$BUCKET/estados/procesar.py
       - FECHA=$(date "+%Y-%m-%d %H:%M:%S")
       - COMMIT=$(git rev-parse --short HEAD 2>/dev/null || echo "N/A")
       - echo "==================================================" >> backup.log
