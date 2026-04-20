@@ -1,7 +1,0 @@
-services:
-  filtro:
-    build: ./app
-    volumes:
-      - ./app:/app
-    environment:
-      - VERSION=1.0

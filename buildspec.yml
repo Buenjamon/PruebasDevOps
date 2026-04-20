@@ -3,32 +3,44 @@ version: 0.2
 env:
   variables:
     VERSION: "1.0"
+    BUCKET: "devopsprueba1"
 
 phases:
   install:
     commands:
       - echo "Iniciando build - Version $VERSION"
+      - pip install --quiet boto3
 
   build:
     commands:
-      - echo "Construyendo imagen Docker..."
-      - docker build -t filtro-estudiantes ./filtro/app
-      - echo "Ejecutando contenedor..."
-      - docker run --rm
-          -v $(pwd)/filtro/app:/app
-          -e VERSION=$VERSION
-          filtro-estudiantes
+      - echo "Ejecutando script de procesamiento..."
+      - cd estados/app
+      - python procesar.py
+      - echo "Validando que resultado.txt fue generado..."
+      - test -f resultado.txt && echo "resultado.txt generado correctamente" || (echo "ERROR: resultado.txt no fue generado" && exit 1)
+      - cd ../..
 
   post_build:
     commands:
       - echo "Subiendo archivos a S3..."
-      - aws s3 cp filtro/app/resultados.json s3://devopsprueba1/filtro/resultados.json
-      - aws s3 cp filtro/app/backup.log s3://devopsprueba1/filtro/backup.log
-      - aws s3 cp filtro/app/estudiantes.json s3://devopsprueba1/filtro/estudiantes.json
-      - echo "Archivos subidos correctamente."
+      - aws s3 cp estados/app/index.html s3://$BUCKET/estados/index.html --content-type "text/html"
+      - aws s3 cp estados/app/resultado.txt s3://$BUCKET/estados/resultado.txt --content-type "text/plain"
+      - aws s3 cp estados/app/data.txt s3://$BUCKET/estados/data.txt
+      - echo "Generando backup.log..."
+      - echo "==================================================" >> backup.log
+      - echo "Fecha y Hora  : $(date '+%Y-%m-%d %H:%M:%S')" >> backup.log
+      - echo "Version       : $VERSION" >> backup.log
+      - echo "Archivo       : data.txt" >> backup.log
+      - echo "Resultado     : resultado.txt generado y subido a S3" >> backup.log
+      - echo "Commit        : $(git rev-parse --short HEAD 2>/dev/null || echo 'N/A')" >> backup.log
+      - echo "==================================================" >> backup.log
+      - aws s3 cp backup.log s3://$BUCKET/estados/backup.log
+      - echo "Pipeline completado exitosamente."
 
 artifacts:
   files:
-    - filtro/app/resultados.json
-    - filtro/app/backup.log
+    - estados/app/index.html
+    - estados/app/resultado.txt
+    - estados/app/data.txt
+    - backup.log
   base-directory: .
