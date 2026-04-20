@@ -16,8 +16,7 @@ phases:
       - echo "Ejecutando script de procesamiento..."
       - cd estados/app && python procesar.py
       - echo "Validando que resultado.txt fue generado..."
-      - test -f estados/app/resultado.txt && echo "resultado.txt generado correctamente" || (echo "ERROR resultado.txt no fue generado" && exit 1)
-      - cd ../..
+      - test -f estados/app/resultado.txt && echo "OK" || (echo "ERROR resultado.txt no generado" && exit 1)
 
   post_build:
     commands:
@@ -25,13 +24,14 @@ phases:
       - aws s3 cp estados/app/index.html s3://$BUCKET/estados/index.html --content-type "text/html"
       - aws s3 cp estados/app/resultado.txt s3://$BUCKET/estados/resultado.txt --content-type "text/plain"
       - aws s3 cp estados/app/data.txt s3://$BUCKET/estados/data.txt
-      - echo "Generando backup.log..."
+      - FECHA=$(date "+%Y-%m-%d %H:%M:%S")
+      - COMMIT=$(git rev-parse --short HEAD 2>/dev/null || echo "N/A")
       - echo "==================================================" >> backup.log
-      - echo "Fecha y Hora  : $(date '+%Y-%m-%d %H:%M:%S')" >> backup.log
-      - echo "Version       : $VERSION" >> backup.log
-      - echo "Archivo       : data.txt" >> backup.log
-      - echo "Resultado     : resultado.txt generado y subido a S3" >> backup.log
-      - echo "Commit        : $(git rev-parse --short HEAD 2>/dev/null || echo 'N/A')" >> backup.log
+      - echo "Fecha y Hora  $FECHA" >> backup.log
+      - echo "Version       $VERSION" >> backup.log
+      - echo "Archivo       data.txt" >> backup.log
+      - echo "Resultado     resultado.txt generado y subido a S3" >> backup.log
+      - echo "Commit        $COMMIT" >> backup.log
       - echo "==================================================" >> backup.log
       - aws s3 cp backup.log s3://$BUCKET/estados/backup.log
       - echo "Pipeline completado exitosamente."
