@@ -1,32 +1,34 @@
 version: 0.2
 
+env:
+  variables:
+    VERSION: "1.0"
+
 phases:
   install:
     commands:
-      - echo "Iniciando build..."
+      - echo "Iniciando build - Version $VERSION"
 
   build:
     commands:
-      - echo "Validando archivos..."
-      - ls calc/app/
-      - docker build -t calculadora ./calc/app
+      - echo "Construyendo imagen Docker..."
+      - docker build -t filtro-estudiantes ./filtro/app
+      - echo "Ejecutando contenedor..."
+      - docker run --rm
+          -v $(pwd)/filtro/app:/app
+          -e VERSION=$VERSION
+          filtro-estudiantes
 
   post_build:
     commands:
-      - echo "Contenido del workspace:"
-      - ls -la
-      - ls -la calc/app/
       - echo "Subiendo archivos a S3..."
-      - aws s3 cp calc/app/index.html s3://devopsprueba1/calculadora/index.html
-      - aws s3 cp calc/app/style.css s3://devopsprueba1/calculadora/style.css
-      - echo "Generando backup.log..."
-      - echo "Build ejecutado el $(date '+%Y-%m-%d %H:%M:%S')" >> backup.log
-      - git log --oneline -10 >> backup.log 2>/dev/null || echo "Sin historial git disponible" >> backup.log
-      - aws s3 cp backup.log s3://devopsprueba1/backup.log
+      - aws s3 cp filtro/app/resultados.json s3://devopsprueba1/filtro/resultados.json
+      - aws s3 cp filtro/app/backup.log s3://devopsprueba1/filtro/backup.log
+      - aws s3 cp filtro/app/estudiantes.json s3://devopsprueba1/filtro/estudiantes.json
+      - echo "Archivos subidos correctamente."
 
 artifacts:
   files:
-    - calc/app/index.html
-    - calc/app/style.css
-    - backup.log
+    - filtro/app/resultados.json
+    - filtro/app/backup.log
   base-directory: .

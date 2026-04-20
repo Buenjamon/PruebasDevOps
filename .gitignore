@@ -2,5 +2,5 @@ __pycache__/
 *.pyc
 .env
 .DS_Store
-*.log
-.venv/
+filtro/app/resultados.json
+filtro/app/backup.log
