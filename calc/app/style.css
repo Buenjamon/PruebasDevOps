@@ -85,3 +85,36 @@ button:hover {
   min-height: 20px;
   color: #1a7a3c;
 }
+
+.historial {
+  margin-top: 14px;
+  text-align: left;
+  border-top: 1px solid #eee;
+  padding-top: 10px;
+}
+
+.hist-titulo {
+  font-size: 12px;
+  color: #999;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.hist-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: #555;
+  padding: 3px 0;
+  border-bottom: 1px dashed #f0f0f0;
+}
+
+.hist-entrada {
+  color: #333;
+}
+
+.hist-res {
+  color: #003087;
+  font-weight: bold;
+}
