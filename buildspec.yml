@@ -15,7 +15,8 @@ phases:
     commands:
       - echo "Ejecutando script de procesamiento..."
       - cd estados/app && python procesar.py && cd ../..
-      - echo "Validando que resultado.txt fue generado..."
+      - echo "Contenido de estados/app:"
+      - ls -la estados/app/
       - test -f estados/app/resultado.txt && echo "OK" || (echo "ERROR resultado.txt no generado" && exit 1)
 
   post_build:
