@@ -17,7 +17,7 @@ phases:
       - ls -la
       - ls -la calc/app/
       - echo "Subiendo archivos a S3..."
-      - aws s3 cp calc/app/pagina.html s3://devopsprueba1/calculadora/pagina.html
+      - aws s3 cp calc/app/index.html s3://devopsprueba1/calculadora/index.html
       - aws s3 cp calc/app/style.css s3://devopsprueba1/calculadora/style.css
       - echo "Generando backup.log..."
       - echo "Build ejecutado el $(date '+%Y-%m-%d %H:%M:%S')" >> backup.log
@@ -26,7 +26,7 @@ phases:
 
 artifacts:
   files:
-    - calc/app/pagina.html
+    - calc/app/index.html
     - calc/app/style.css
     - backup.log
   base-directory: .
